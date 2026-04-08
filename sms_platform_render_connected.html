@@ -1,0 +1,443 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --proxy:https://message-fl5z.onrender.com;
+  --primary:#2563EB;--primary-light:#EFF6FF;
+  --success:#16A34A;--danger:#DC2626;--warn:#D97706;
+  --border:var(--color-border-tertiary);
+  --bg:var(--color-background-primary);--bg2:var(--color-background-secondary);--bg3:var(--color-background-tertiary);
+  --txt:var(--color-text-primary);--txt2:var(--color-text-secondary);--txt3:var(--color-text-tertiary);
+}
+body{font-family:'Apple SD Gothic Neo',sans-serif;}
+.auth-wrap{display:flex;align-items:center;justify-content:center;min-height:700px;background:var(--bg3);}
+.auth-card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--border-radius-lg);padding:2.5rem 2rem;width:380px;}
+.auth-logo{font-size:22px;font-weight:600;color:var(--primary);margin-bottom:4px;}
+.auth-sub{font-size:12px;color:var(--txt2);margin-bottom:6px;}
+.proxy-badge{font-size:11px;background:#DCFCE7;color:#166534;border-radius:20px;padding:3px 10px;display:inline-block;margin-bottom:1.25rem;}
+.field{margin-bottom:12px;}
+.field label{display:block;font-size:12px;color:var(--txt2);margin-bottom:5px;font-weight:500;}
+.field input{width:100%;padding:9px 12px;border:0.5px solid var(--border);border-radius:var(--border-radius-md);font-size:13px;background:var(--bg);color:var(--txt);outline:none;font-family:inherit;}
+.field input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(37,99,235,.1);}
+.field .hint{font-size:11px;color:var(--txt3);margin-top:4px;}
+.btn-primary{width:100%;padding:10px;background:var(--primary);color:#fff;border:none;border-radius:var(--border-radius-md);font-size:14px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:opacity .15s;}
+.btn-primary:hover{opacity:.9;}
+.btn-primary:disabled{opacity:.5;cursor:not-allowed;}
+.sbox{margin-top:12px;border-radius:var(--border-radius-md);padding:10px 14px;font-size:12px;display:none;line-height:1.6;}
+.sbox.info{display:block;background:#EFF6FF;color:#1E40AF;border:0.5px solid #BFDBFE;}
+.sbox.success{display:block;background:#DCFCE7;color:#166534;border:0.5px solid #BBF7D0;}
+.sbox.error{display:block;background:#FEE2E2;color:#991B1B;border:0.5px solid #FECACA;}
+.spinner{width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;flex-shrink:0;}
+.spinner-sm{width:11px;height:11px;border:2px solid rgba(37,99,235,.2);border-top-color:var(--primary);border-radius:50%;animation:spin .6s linear infinite;display:inline-block;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+.shell{display:flex;flex-direction:column;min-height:700px;}
+.hdr{height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 1.25rem;background:var(--bg);border-bottom:0.5px solid var(--border);}
+.hdr-logo{font-size:16px;font-weight:600;color:var(--primary);}
+.hdr-r{display:flex;align-items:center;gap:10px;}
+.tbadge{font-size:11px;border-radius:20px;padding:3px 10px;font-weight:500;background:#DCFCE7;color:#166534;}
+.lout{font-size:12px;color:var(--txt2);border:0.5px solid var(--border);border-radius:var(--border-radius-md);padding:5px 10px;background:var(--bg);cursor:pointer;}
+.lout:hover{background:var(--bg2);}
+.bwrap{display:flex;flex:1;}
+.sidebar{width:210px;background:var(--bg);border-right:0.5px solid var(--border);padding:1rem 0;flex-shrink:0;}
+.nlabel{font-size:10px;font-weight:600;color:var(--txt3);letter-spacing:.08em;text-transform:uppercase;padding:0 1rem;margin-bottom:4px;}
+.nsec{margin-bottom:1.25rem;}
+.ni{display:flex;align-items:center;gap:8px;padding:8px 1rem;font-size:13px;color:var(--txt2);cursor:pointer;border-left:2px solid transparent;transition:all .12s;}
+.ni:hover{background:var(--bg2);color:var(--txt);}
+.ni.active{background:var(--primary-light);color:var(--primary);border-left-color:var(--primary);font-weight:500;}
+.nic{font-size:15px;width:18px;text-align:center;}
+.main{flex:1;overflow-y:auto;padding:1.5rem;}
+.ptitle{font-size:18px;font-weight:500;color:var(--txt);margin-bottom:1.5rem;}
+
+.sms-layout{display:grid;grid-template-columns:1fr 265px;gap:1.25rem;}
+.sform{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--border-radius-lg);padding:1.25rem;}
+.ssec{margin-bottom:1.15rem;}
+.slabel{font-size:12px;color:var(--txt2);font-weight:500;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;}
+.sinput{width:100%;padding:8px 12px;border:0.5px solid var(--border);border-radius:var(--border-radius-md);font-size:13px;background:var(--bg);color:var(--txt);outline:none;font-family:inherit;}
+.sinput:focus{border-color:var(--primary);}
+.sta{width:100%;padding:10px 12px;border:0.5px solid var(--border);border-radius:var(--border-radius-md);font-size:13px;background:var(--bg);color:var(--txt);resize:none;height:120px;outline:none;font-family:inherit;line-height:1.6;}
+.sta:focus{border-color:var(--primary);}
+.trow{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+.tpill{font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;}
+.tsms{background:#DBEAFE;color:#1E40AF;}
+.tlms{background:#FEF3C7;color:#92400E;}
+.tmms{background:#F3E8FF;color:#6B21A8;}
+.binfo{font-size:11px;color:var(--txt3);}
+.subinp{width:100%;padding:8px 12px;border:0.5px solid var(--border);border-radius:var(--border-radius-md);font-size:13px;background:var(--bg);color:var(--txt);outline:none;font-family:inherit;margin-bottom:8px;display:none;}
+.subinp.show{display:block;}
+.rwrap{display:flex;flex-wrap:wrap;gap:5px;padding:7px;border:0.5px solid var(--border);border-radius:var(--border-radius-md);min-height:40px;background:var(--bg);cursor:text;}
+.rchip{display:flex;align-items:center;gap:3px;background:var(--primary-light);color:var(--primary);font-size:12px;padding:3px 8px;border-radius:20px;}
+.rchipx{cursor:pointer;font-size:13px;line-height:1;}
+.rinput{border:none;outline:none;font-size:12px;background:transparent;flex:1;min-width:110px;color:var(--txt);}
+.sfooter{display:flex;gap:8px;justify-content:flex-end;border-top:0.5px solid var(--border);padding-top:1rem;margin-top:.5rem;}
+.bsm{padding:7px 13px;font-size:13px;border-radius:var(--border-radius-md);cursor:pointer;border:0.5px solid var(--border);background:var(--bg);color:var(--txt);display:flex;align-items:center;gap:5px;transition:background .12s;}
+.bsm:hover{background:var(--bg2);}
+.bblue{background:var(--primary);color:#fff;border-color:var(--primary);}
+.bblue:hover{opacity:.9;background:var(--primary);}
+.bblue:disabled{opacity:.5;cursor:not-allowed;}
+
+.pframe{width:248px;flex-shrink:0;}
+.pshell{border:7px solid #1C1C1E;border-radius:36px;overflow:hidden;background:#fff;box-shadow:0 0 0 1.5px #3A3A3C;}
+.pnotch{background:#1C1C1E;height:25px;display:flex;align-items:center;justify-content:center;}
+.ppill{width:76px;height:7px;background:#000;border-radius:10px;}
+.pscreen{background:#F2F2F7;min-height:320px;padding:11px;}
+.pcont{display:flex;align-items:center;gap:8px;margin-bottom:12px;}
+.pavatar{width:32px;height:32px;border-radius:50%;background:#007AFF;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;}
+.pname{font-size:12px;font-weight:600;color:#000;}
+.psub{font-size:10px;color:#8E8E93;}
+.pbw{display:flex;justify-content:flex-end;margin-bottom:3px;}
+.pbubble{background:#007AFF;color:#fff;border-radius:18px 18px 4px 18px;padding:9px 13px;font-size:12px;max-width:200px;line-height:1.5;word-break:break-all;}
+.pbubble.empty{background:#E5E5EA;color:#8E8E93;font-style:italic;}
+.ptlbl{text-align:right;font-size:10px;color:#8E8E93;margin-bottom:4px;}
+.phome{height:16px;display:flex;align-items:center;justify-content:center;}
+.phomebar{width:92px;height:4px;background:#1C1C1E;border-radius:10px;opacity:.3;}
+
+.log-wrap{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--border-radius-lg);margin-top:1rem;overflow:hidden;}
+.log-hdr{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:0.5px solid var(--border);}
+.log-title{font-size:13px;font-weight:500;}
+.log-list{max-height:200px;overflow-y:auto;}
+.litem{display:flex;align-items:flex-start;gap:8px;padding:9px 14px;border-bottom:0.5px solid var(--border);font-size:12px;}
+.litem:last-child{border-bottom:none;}
+.ldot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:4px;}
+.ldot.ok{background:var(--success);}
+.ldot.err{background:var(--danger);}
+.ldot.pending{background:var(--warn);animation:pulse 1s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
+.lbody{flex:1;line-height:1.5;}
+.lmeta{color:var(--txt3);font-size:11px;}
+.badge{display:inline-block;font-size:11px;padding:2px 7px;border-radius:20px;font-weight:500;}
+.bok{background:#DCFCE7;color:#166534;}
+.berr{background:#FEE2E2;color:#991B1B;}
+.bwarn{background:#FEF3C7;color:#92400E;}
+
+.poll-bar{display:flex;align-items:center;gap:10px;background:var(--bg);border:0.5px solid var(--border);border-radius:var(--border-radius-lg);padding:12px 16px;margin-bottom:1rem;flex-wrap:wrap;}
+.poll-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:4px;}
+.poll-dot.idle{background:#9CA3AF;}
+.poll-dot.running{background:var(--success);animation:pulse 1.2s ease-in-out infinite;}
+.poll-dot.done{background:var(--primary);}
+.poll-dot.error{background:var(--danger);}
+.twrap{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--border-radius-lg);overflow:hidden;}
+.thead-row{display:flex;align-items:center;justify-content:space-between;padding:11px 16px;border-bottom:0.5px solid var(--border);}
+table{width:100%;border-collapse:collapse;font-size:12px;}
+th{padding:8px 14px;text-align:left;font-size:11px;font-weight:600;color:var(--txt3);border-bottom:0.5px solid var(--border);background:var(--bg2);}
+td{padding:9px 14px;border-bottom:0.5px solid var(--border);color:var(--txt);}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:var(--bg2);}
+.sum-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:1rem;}
+.scard{background:var(--bg2);border-radius:var(--border-radius-md);padding:.9rem 1rem;}
+.scard-label{font-size:11px;color:var(--txt2);margin-bottom:5px;}
+.scard-val{font-size:22px;font-weight:500;color:var(--txt);}
+.empty-row{padding:28px;text-align:center;font-size:13px;color:var(--txt3);}
+</style>
+
+<div id="root"></div>
+
+<script>
+const PROXY='https://message-fl5z.onrender.com';
+
+const S={
+  view:'login',userCode:'',secretKey:'',
+  accessToken:null,tokenType:'Bearer',expiresIn:null,tokenAt:null,
+  loading:false,stType:'',stMsg:'',
+  page:'send',
+  msgText:'',subject:'',images:[null,null,null],
+  recipients:[],
+  senders:[{num:'010-1234-5678',label:'대표번호'},{num:'15884640',label:'ARS'}],
+  selSender:0,sending:false,sendLog:[],
+  useReserve:false,reservedTime:'',
+  pollType:'S',polling:false,pollStatus:'idle',pollMsg:'',
+  pollResults:[],pollChecksum:null,pollLastAt:null,completing:false,completeMsg:'',
+};
+
+function byteLen(s){let b=0;for(let c of s)b+=c.charCodeAt(0)>127?2:1;return b;}
+function msgType(){return S.images.some(x=>x)?'MMS':byteLen(S.msgText)>90?'LMS':'SMS';}
+function typeClass(t){return t==='SMS'?'tsms':t==='LMS'?'tlms':'tmms';}
+function maxByte(t){return t==='SMS'?90:2000;}
+function nowTs(){return new Date().toLocaleTimeString('ko-KR');}
+function uid(){return Math.floor(Math.random()*90000000)+10000000;}
+function fmtTime(s){if(!s||s.length<12)return s||'';return`${s.slice(0,4)}-${s.slice(4,6)}-${s.slice(6,8)} ${s.slice(8,10)}:${s.slice(10,12)}`;}
+function carrierLabel(c){return{S:'SKT',K:'KT',L:'LG U+'}[c]||c;}
+
+function render(){document.getElementById('root').innerHTML=S.view==='login'?renderLogin():renderShell();}
+
+function renderLogin(){return`
+<div class="auth-wrap"><div class="auth-card">
+  <div class="auth-logo">문자마스터</div>
+  <div class="auth-sub">슈어엠(SureM) REST API 연동 플랫폼</div>
+  <div class="proxy-badge">프록시 서버 연결됨: message-fl5z.onrender.com</div>
+  <div class="field"><label>슈어엠 아이디 (userCode)</label>
+    <input id="uc" type="text" placeholder="슈어엠 제공 아이디" value="${S.userCode}" maxlength="30"/>
+    <div class="hint">최대 30자</div></div>
+  <div class="field"><label>API 키 (secretKey)</label>
+    <input id="sk" type="password" placeholder="슈어엠 제공 API 키" value="${S.secretKey}" maxlength="40"/>
+    <div class="hint">최대 40자</div></div>
+  <button class="btn-primary" onclick="doAuth()" ${S.loading?'disabled':''}>
+    ${S.loading?'<div class="spinner"></div><span>토큰 발급 중...</span>':'로그인 (실제 API 연동)'}</button>
+  <div class="sbox ${S.stType}">${S.stMsg}</div>
+</div></div>`;}
+
+function renderShell(){return`
+<div class="shell">
+  <div class="hdr">
+    <div class="hdr-logo">문자마스터</div>
+    <div class="hdr-r">
+      <span class="tbadge">슈어엠 인증됨</span>
+      <span style="font-size:13px;color:var(--txt2)">${S.userCode}</span>
+      <button class="lout" onclick="doLogout()">로그아웃</button>
+    </div>
+  </div>
+  <div class="bwrap">
+    <nav class="sidebar">
+      <div class="nsec">
+        <div class="nlabel">문자발송</div>
+        <div class="ni ${S.page==='send'?'active':''}" onclick="gp('send')"><span class="nic">✉️</span>문자 발송</div>
+      </div>
+      <div class="nsec">
+        <div class="nlabel">결과조회</div>
+        <div class="ni ${S.page==='results'?'active':''}" onclick="gp('results')"><span class="nic">📊</span>전송 결과</div>
+      </div>
+    </nav>
+    <main class="main">
+      ${S.page==='send'?renderSend():renderResults()}
+    </main>
+  </div>
+</div>`;}
+
+function renderSend(){
+  const t=msgType();const bc=byteLen(S.msgText);
+  const chips=S.recipients.map((r,i)=>`<div class="rchip">${r}<span class="rchipx" onclick="rmRcpt(${i})">×</span></div>`).join('');
+  const slots=S.images.map((img,i)=>img
+    ?`<div style="width:72px;height:72px;border:0.5px solid var(--border);border-radius:var(--border-radius-md);overflow:hidden;position:relative;">
+        <img src="${img}" style="width:100%;height:100%;object-fit:cover"/>
+        <div onclick="rmImg(${i})" style="position:absolute;top:2px;right:4px;color:var(--danger);font-size:15px;font-weight:700;cursor:pointer;background:rgba(255,255,255,.85);border-radius:50%;width:16px;height:16px;display:flex;align-items:center;justify-content:center;line-height:1;">×</div>
+      </div>`
+    :`<label style="width:72px;height:72px;border:1px dashed var(--border);border-radius:var(--border-radius-md);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;font-size:11px;color:var(--txt3);background:var(--bg2);">
+        <input type="file" accept="image/*" style="display:none" onchange="addImg(event,${i})"/>
+        <span style="font-size:18px">+</span><span>이미지</span></label>`).join('');
+  const senderOpts=S.senders.map((s,i)=>`<option value="${i}" ${S.selSender===i?'selected':''}>${s.num} (${s.label})</option>`).join('');
+  const logItems=S.sendLog.length===0
+    ?`<div class="empty-row">발송 내역이 없습니다.</div>`
+    :S.sendLog.slice().reverse().map(l=>`
+    <div class="litem">
+      <div class="ldot ${l.status}"></div>
+      <div class="lbody">
+        <div><span class="badge ${l.status==='ok'?'bok':l.status==='err'?'berr':'bwarn'}">${l.type}</span>
+          &nbsp;→&nbsp;<strong>${l.to}</strong>&nbsp;
+          ${l.status==='ok'?'<span style="color:var(--success)">발송 성공</span>':l.status==='err'?'<span style="color:var(--danger)">발송 실패</span>':'<span style="color:var(--warn)">발송 중...</span>'}
+          ${l.code?`<span style="color:var(--txt3);font-size:11px"> (${l.code})</span>`:''}
+        </div>
+        <div class="lmeta">${l.time} · ID:${l.msgId}${l.errMsg?' · <span style="color:var(--danger)">'+l.errMsg+'</span>':''}</div>
+      </div>
+    </div>`).join('');
+
+  return`
+  <div class="ptitle">문자 발송</div>
+  <div class="sms-layout">
+    <div>
+      <div class="sform">
+        <div class="ssec">
+          <div class="slabel">발신번호</div>
+          <select class="sinput" style="width:220px" onchange="S.selSender=parseInt(this.value)">${senderOpts}</select>
+        </div>
+        <div class="ssec">
+          <div class="slabel">수신번호</div>
+          <div class="rwrap" onclick="document.getElementById('ri').focus()">
+            ${chips}
+            <input id="ri" class="rinput" placeholder="${S.recipients.length?'번호 추가...':'010-0000-0000 입력 후 엔터'}" onkeydown="addRcpt(event)"/>
+          </div>
+          <div style="font-size:11px;color:var(--txt3);margin-top:4px;">총 ${S.recipients.length}명</div>
+        </div>
+        <div class="ssec">
+          <div class="trow">
+            <span class="tpill ${typeClass(t)}">${t}</span>
+            <span class="binfo">${bc} / ${maxByte(t)} byte${bc>90&&t==='LMS'?' · LMS 자동전환':''} ${S.images.some(x=>x)?' · MMS':''}</span>
+          </div>
+          <input id="subinp" class="subinp ${t!=='SMS'?'show':''}" type="text" placeholder="제목 (최대 30자)" maxlength="30" value="${S.subject}" oninput="S.subject=this.value"/>
+          <textarea class="sta" placeholder="메시지를 입력하세요.&#10;90byte 초과 시 자동으로 LMS로 전환됩니다." oninput="onMsg(this.value)">${S.msgText}</textarea>
+        </div>
+        <div class="ssec">
+          <div class="slabel">이미지 첨부 <span style="font-size:11px;color:var(--txt3)">(최대 3개)</span></div>
+          <div style="display:flex;gap:8px;">${slots}</div>
+        </div>
+        <div class="sfooter">
+          <button class="bsm" onclick="clearForm()">초기화</button>
+          <button class="bsm bblue" onclick="doSend()" ${S.sending||!S.recipients.length||!S.msgText.trim()?'disabled':''}>
+            ${S.sending?'<div class="spinner"></div><span>발송 중...</span>':`${t} 실제 발송 (${S.recipients.length}명)`}
+          </button>
+        </div>
+      </div>
+      <div class="log-wrap">
+        <div class="log-hdr">
+          <span class="log-title">발송 결과 로그</span>
+          <button class="bsm" style="font-size:12px;padding:4px 10px" onclick="S.sendLog=[];render()">초기화</button>
+        </div>
+        <div class="log-list">${logItems}</div>
+      </div>
+    </div>
+    <div class="pframe">
+      <div class="pshell">
+        <div class="pnotch"><div class="ppill"></div></div>
+        <div class="pscreen">
+          <div class="pcont">
+            <div class="pavatar">수</div>
+            <div><div class="pname">${S.recipients[0]||'수신자'}</div><div class="psub">${msgType()} 미리보기</div></div>
+          </div>
+          <div class="pbw">
+            ${S.msgText
+              ?`<div class="pbubble">${S.subject?`<strong>${S.subject}</strong><br>`:''} ${S.msgText.replace(/\n/g,'<br>')}</div>`
+              :`<div class="pbubble empty">메시지를 입력하세요</div>`}
+          </div>
+          <div class="ptlbl">${msgType()} · ${byteLen(S.msgText)}byte</div>
+        </div>
+        <div class="phome"><div class="phomebar"></div></div>
+      </div>
+    </div>
+  </div>`;}
+
+function renderResults(){
+  const total=S.pollResults.length;
+  const ok=S.pollResults.filter(r=>r.result==='2').length;
+  const fail=S.pollResults.filter(r=>r.result==='4').length;
+  const dotCls={idle:'idle',running:'running',done:'done',error:'error'}[S.pollStatus]||'idle';
+  const rows=S.pollResults.length===0
+    ?`<tr><td colspan="6" class="empty-row">결과가 없습니다. 조회 버튼을 눌러주세요.</td></tr>`
+    :S.pollResults.map(r=>`
+    <tr>
+      <td>${r.member||'-'}</td>
+      <td><span class="badge ${r.result==='2'?'bok':'berr'}">${r.result==='2'?'성공':'실패'}</span></td>
+      <td><span class="badge" style="background:#DBEAFE;color:#1E40AF">${r.sentmedia||'-'}</span></td>
+      <td>${carrierLabel(r.mediatype)}</td>
+      <td style="font-family:monospace;font-size:11px">${r.errorcode||'-'}</td>
+      <td style="font-size:11px">${fmtTime(r.recvtime)}</td>
+    </tr>`).join('');
+
+  return`
+  <div class="ptitle">전송 결과 조회</div>
+  <div class="sum-grid">
+    <div class="scard"><div class="scard-label">전체</div><div class="scard-val">${total}</div></div>
+    <div class="scard"><div class="scard-label">성공</div><div class="scard-val" style="color:var(--success)">${ok}</div></div>
+    <div class="scard"><div class="scard-label">실패</div><div class="scard-val" style="color:var(--danger)">${fail}</div></div>
+    <div class="scard"><div class="scard-label">성공률</div><div class="scard-val">${total?Math.round(ok/total*100)+'%':'—'}</div></div>
+  </div>
+  <div class="poll-bar">
+    <span style="font-size:13px;font-weight:500">결과 조회 (Polling)</span>
+    <select onchange="S.pollType=this.value" style="padding:6px 10px;border:0.5px solid var(--border);border-radius:var(--border-radius-md);font-size:13px;background:var(--bg);color:var(--txt);outline:none;">
+      <option value="S" ${S.pollType==='S'?'selected':''}>SMS</option>
+      <option value="M" ${S.pollType==='M'?'selected':''}>MMS</option>
+    </select>
+    <button class="bsm bblue" onclick="doPoll()" ${S.polling?'disabled':''}>
+      ${S.polling?'<div class="spinner"></div><span>조회 중...</span>':'결과 조회'}
+    </button>
+    <span style="font-size:12px;color:var(--txt2)"><span class="poll-dot ${dotCls}"></span>${S.pollMsg||'대기 중'}</span>
+    ${S.pollChecksum?`
+    <button class="bsm" style="background:#DCFCE7;color:#166534;border-color:#BBF7D0" onclick="doComplete()" ${S.completing?'disabled':''}>
+      ${S.completing?'처리 중...':'완료 처리 (필수)'}
+    </button>`:''}
+  </div>
+  <div class="twrap">
+    <div class="thead-row"><span style="font-size:13px;font-weight:500">결과 목록</span>
+      <button class="bsm" style="font-size:12px;padding:4px 10px" onclick="S.pollResults=[];S.pollChecksum=null;render()">초기화</button>
+    </div>
+    <table><thead><tr><th>messageId</th><th>결과</th><th>타입</th><th>통신사</th><th>결과코드</th><th>수신시간</th></tr></thead>
+    <tbody>${rows}</tbody></table>
+  </div>`;}
+
+window.gp=p=>{S.page=p;render();};
+window.onMsg=v=>{
+  S.msgText=v;
+  const t=msgType(),bc=byteLen(v);
+  const si=document.getElementById('subinp');if(si)si.className='subinp'+(t!=='SMS'?' show':'');
+  const tp=document.querySelector('.tpill');if(tp){tp.textContent=t;tp.className='tpill '+typeClass(t);}
+  const bi=document.querySelector('.binfo');if(bi)bi.textContent=`${bc} / ${maxByte(t)} byte${bc>90&&t==='LMS'?' · LMS 자동전환':''}${S.images.some(x=>x)?' · MMS':''}`;
+  const pb=document.querySelector('.pbubble,.pbubble.empty');
+  if(pb){if(v.trim()){pb.className='pbubble';pb.innerHTML=(S.subject?`<strong>${S.subject}</strong><br>`:'')+v.replace(/\n/g,'<br>');}else{pb.className='pbubble empty';pb.textContent='메시지를 입력하세요';}}
+  const pl=document.querySelector('.ptlbl');if(pl)pl.textContent=`${t} · ${bc}byte`;
+};
+window.addRcpt=e=>{if(e.key==='Enter'){const v=e.target.value.trim();if(v){S.recipients.push(v);e.target.value='';render();}}};
+window.rmRcpt=i=>{S.recipients.splice(i,1);render();};
+window.addImg=(ev,i)=>{const f=ev.target.files[0];if(!f)return;const r=new FileReader();r.onload=e=>{S.images[i]=e.target.result;render();};r.readAsDataURL(f);};
+window.rmImg=i=>{S.images[i]=null;render();};
+window.clearForm=()=>{S.msgText='';S.subject='';S.images=[null,null,null];S.recipients=[];S.useReserve=false;render();};
+
+window.doAuth=async()=>{
+  const uc=document.getElementById('uc')?.value.trim();
+  const sk=document.getElementById('sk')?.value.trim();
+  if(!uc||!sk){S.stType='error';S.stMsg='아이디와 API 키를 입력해주세요.';render();return;}
+  S.userCode=uc;S.secretKey=sk;S.loading=true;S.stType='info';S.stMsg='프록시 서버를 통해 토큰 발급 중...';render();
+  try{
+    const res=await fetch(`${PROXY}/proxy/auth/token`,{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({userCode:uc,secretKey:sk}),
+    });
+    const j=await res.json();S.loading=false;
+    if(j.data?.accessToken){
+      S.accessToken=j.data.accessToken;S.tokenType=j.data.tokenType||'Bearer';
+      S.expiresIn=j.data.expiresIn;S.tokenAt=Date.now();
+      S.stType='success';S.stMsg='토큰 발급 성공!';render();
+      setTimeout(()=>{S.view='main';S.page='send';render();},1000);
+    }else{S.loading=false;S.stType='error';S.stMsg=`오류 (${j.code}): ${j.message||'인증 실패'}`;render();}
+  }catch(err){S.loading=false;S.stType='error';S.stMsg='서버 연결 오류: '+err.message;render();}
+};
+window.doLogout=()=>{S.view='login';S.accessToken=null;S.stType='';S.stMsg='';render();};
+
+window.doSend=async()=>{
+  if(!S.msgText.trim()||!S.recipients.length)return;
+  const t=msgType();const sender=S.senders[S.selSender];
+  S.sending=true;render();
+  for(const to of S.recipients){
+    const msgId=uid();
+    const entry={to,type:t,from:sender.num,status:'pending',code:'',errMsg:'',time:nowTs(),msgId};
+    S.sendLog.push(entry);render();
+    try{
+      const ep=t==='SMS'?`${PROXY}/proxy/send/sms`:`${PROXY}/proxy/send/mms`;
+      const body={to:to.replace(/-/g,''),text:S.msgText,reqPhone:sender.num.replace(/-/g,''),messageId:msgId};
+      if(t!=='SMS'&&S.subject)body.subject=S.subject;
+      if(S.useReserve&&S.reservedTime)body.reservedTime=S.reservedTime;
+      const res=await fetch(ep,{
+        method:'POST',
+        headers:{'Content-Type':'application/json','Authorization':`${S.tokenType} ${S.accessToken}`},
+        body:JSON.stringify(body),
+      });
+      const j=await res.json();entry.code=j.code;
+      if(j.code==='0000'||j.code==='00'){entry.status='ok';}
+      else{entry.status='err';entry.errMsg=j.message||'';}
+    }catch(err){entry.status='err';entry.errMsg=err.message;}
+    render();
+  }
+  S.sending=false;render();
+};
+
+window.doPoll=async()=>{
+  S.polling=true;S.pollStatus='running';S.pollMsg='조회 중...';render();
+  try{
+    const res=await fetch(`${PROXY}/proxy/report/responseAll?type=${S.pollType}`,{
+      headers:{'Authorization':`${S.tokenType} ${S.accessToken}`},
+    });
+    const j=await res.json();
+    if(j.data&&j.data.length>0){
+      S.pollResults=j.data;S.pollChecksum=j.checksum||null;
+      S.pollStatus='done';S.pollLastAt=nowTs();
+      S.pollMsg=`${j.data.length}건 수신 — 완료 처리 필수!`;
+    }else{S.pollStatus='done';S.pollMsg='결과 없음 (아직 미도착)';}
+  }catch(err){S.pollStatus='error';S.pollMsg='오류: '+err.message;}
+  S.polling=false;render();
+};
+
+window.doComplete=async()=>{
+  if(!S.pollChecksum)return;
+  S.completing=true;render();
+  try{
+    const res=await fetch(`${PROXY}/proxy/report/complete`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':`${S.tokenType} ${S.accessToken}`},
+      body:JSON.stringify({checksum:S.pollChecksum}),
+    });
+    const j=await res.json();
+    if(j.code==='0000'||j.code==='00'){S.pollChecksum=null;S.pollResults=[];S.pollMsg='완료 처리 성공!';}
+    else{S.pollMsg='완료 처리 오류: '+j.message;}
+  }catch(err){S.pollMsg='오류: '+err.message;}
+  S.completing=false;render();
+};
+
+render();
+</script>
