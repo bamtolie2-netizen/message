@@ -17,7 +17,8 @@ const app  = express();
 const PORT = process.env.PORT || 3000;
 
 // ── 슈어엠 API 기본 URL ──────────────────────────────────
-const SUREM_BASE = 'https://rest.surem.com';
+const SUREM_BASE = 'https://dynapi.surem.com';
+const SECU_CD = 'f71742597bd420117f7736f9b052a665fed39d1cdf53707f955da2d6921dcd32';
 
 // ── 미들웨어 ─────────────────────────────────────────────
 app.use(express.json());
@@ -33,7 +34,7 @@ app.use(cors({
 async function proxyRequest(method, path, { body, headers, params } = {}) {
   const config = {
     method,
-    url: `${SUREM_BASE}${path}`,
+   url: `${SUREM_BASE}${path}?secuCd=${SECU_CD}`
     headers: {
       'Content-Type': 'application/json',
       ...headers,
